@@ -49,7 +49,7 @@ export const useSdk = ():
     setSdk(newSdk);
     setLoggedIn(true);
     setLoading(false);
-  }, []);
+  }, [router]);
 
   // @ts-expect-error this code is (hopefully) correct
   return {
