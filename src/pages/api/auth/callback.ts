@@ -30,7 +30,7 @@ const handler = async (req: Request) => {
     method: "POST",
   })
 
-  const json = await res.json();
+  const json = await res.json() as unknown as Record<string, string | number>;
 
   const redirect_url = env.VERCEL_URL
     ? `${env.VERCEL_URL}/?`

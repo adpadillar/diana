@@ -1,4 +1,4 @@
-import { SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { type AccessToken, SpotifyApi } from "@spotify/web-api-ts-sdk";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -30,16 +30,16 @@ export const useSdk = (): {
       return;
     }
 
-    const jsonToken = JSON.parse(token)
+    const jsonToken = JSON.parse(token) as unknown
 
     // If the token IS present, use it to create the sdk
     const newSdk = SpotifyApi.withAccessToken(
       "f8968eaa5300419f82038abec5209fc3",
-      jsonToken,
+      jsonToken as AccessToken,
     )
 
     // clean up the url after we are done
-    router.push(
+    void router.push(
       document.location.origin + document.location.pathname,
       undefined,
       { shallow: true }
@@ -50,7 +50,7 @@ export const useSdk = (): {
     setLoading(false);
   }, [])
 
-  // @ts-ignore because we are (maybe) sure that this is correct
+  // @ts-expect-error this code is (hopefully) correct
   return {
     loggedIn,
     sdk,

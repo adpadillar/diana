@@ -1,4 +1,4 @@
-import { SimplifiedPlaylist, SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { type SimplifiedPlaylist, type SpotifyApi } from "@spotify/web-api-ts-sdk";
 import { useState } from "react";
 import { Redirect } from "~/components/Redirect";
 import { useSdk } from "~/hooks/useSdk";
