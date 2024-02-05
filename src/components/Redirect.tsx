@@ -1,12 +1,12 @@
-import { useRouter } from "next/router"
-import { useEffect } from "react"
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-export const Redirect = ({href}: {href: string}) => {
-  const router = useRouter()
+export const Redirect = ({ href }: { href: string }) => {
+  const router = useRouter();
 
   useEffect(() => {
-    void router.push(href)
+    void router.push(href);
   }, []);
 
-  return <></>
-}
+  return <></>;
+};
