@@ -25,6 +25,8 @@ const handler = () => {
     ? `${env.VERCEL_URL}/api/auth/callback/`
     : `http://localhost:${env.PORT}/api/auth/callback/`
 
+  console.log(redirect_uri);
+
   const auth_query_params = new URLSearchParams({
     response_type: "code",
     client_id: env.SPOTIFY_CLIENT_ID,
