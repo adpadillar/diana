@@ -16,18 +16,29 @@ export const generateRandomString = (len: number) => {
   return text;
 };
 
-const handler = () => {
+const handler = (req: Request) => {
   const scope =
     "streaming \
                  user-read-email \
                  user-read-private";
 
-  const state = generateRandomString(16);
+  const url = new URL(req.url);
+  const source = url.searchParams.get("source");
+
+  // Send some state along so that we can get it back
+  // in the callback
+  const state = JSON.stringify({
+    code: generateRandomString(16),
+    source:
+      source ??
+      (env.VERCEL_URL
+        ? "https://diana.axelpadilla.me/"
+        : `http://localhost:${env.PORT}/`),
+  });
+
   const redirect_uri = env.VERCEL_URL
     ? `https://diana.axelpadilla.me/api/auth/callback/`
     : `http://localhost:${env.PORT}/api/auth/callback/`;
-
-  console.log(redirect_uri);
 
   const auth_query_params = new URLSearchParams({
     response_type: "code",

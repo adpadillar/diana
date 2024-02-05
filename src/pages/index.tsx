@@ -72,11 +72,11 @@ export default function Home() {
     );
   }
 
-  // redirect to login if user is not logged in
-  if (!loggedIn && !loading) {
-    return <Redirect href="/api/auth/login" />;
-  }
+  if (!sdk && !loggedIn && !loading) {
+    const params = new URLSearchParams({
+      source: document.location.origin + document.location.pathname,
+    });
 
-  // return null in impossible state
-  return null;
+    return <Redirect href={`/api/auth/login?${params.toString()}`} />;
+  }
 }

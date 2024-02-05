@@ -38,14 +38,14 @@ const handler = async (req: Request) => {
   );
 
   const json = (await res.json()) as unknown as Record<string, string | number>;
+  const jsonState = JSON.parse(state) as unknown as {
+    code: string;
+    source: string;
+  };
 
-  const redirect_url = env.VERCEL_URL
-    ? `https://diana.axelpadilla.me/?`
-    : `http://localhost:${env.PORT}/?`;
-
-  // TODO: Push to a client route where we can create the sdk but then redirect to where we were
   return Response.redirect(
-    redirect_url +
+    jsonState.source +
+      "?" +
       new URLSearchParams({
         token: JSON.stringify({ ...json, scope: undefined }),
       }).toString(),

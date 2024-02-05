@@ -1,8 +1,34 @@
 import { type AccessToken, SpotifyApi } from "@spotify/web-api-ts-sdk";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+  createContext,
+  type ReactNode,
+  useContext,
+} from "react";
 
-export const useSdk = ():
+const SdkContext = createContext<ReturnType<typeof useSdkInternal>>({
+  loggedIn: false,
+  sdk: null,
+  loading: true,
+});
+
+export const SdkContextProvider = (props: { children: ReactNode }) => {
+  const ctx = useSdkInternal();
+
+  return (
+    <SdkContext.Provider value={ctx}>{props.children}</SdkContext.Provider>
+  );
+};
+
+export const useSdk = () => {
+  const ctx = useContext(SdkContext);
+
+  return ctx;
+};
+
+const useSdkInternal = ():
   | {
       loggedIn: true;
       sdk: SpotifyApi;
@@ -49,7 +75,7 @@ export const useSdk = ():
     setSdk(newSdk);
     setLoggedIn(true);
     setLoading(false);
-  }, [router]);
+  }, []);
 
   // @ts-expect-error this code is (hopefully) correct
   return {
