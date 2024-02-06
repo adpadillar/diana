@@ -17,7 +17,7 @@ const Track = ({ track, audio }: { track: Track; audio: HTMLAudioElement }) => {
 
   return (
     <div className="flex items-center overflow-hidden rounded-md bg-gray-800">
-      <Link href={track.external_urls.spotify}>
+      <Link href={track.external_urls.spotify} target="_blank">
         <picture>
           <img
             className="h-24 min-h-24 w-24 min-w-24"
@@ -33,14 +33,16 @@ const Track = ({ track, audio }: { track: Track; audio: HTMLAudioElement }) => {
             {track.artists.map((a) => a.name).join(", ")}
           </p>
         </div>
-        <div>
-          <button
-            onClick={playPreview}
-            className="rounded-md bg-green-600 px-4 py-2 font-semibold text-white"
-          >
-            Play
-          </button>
-        </div>
+        {track.preview_url ? (
+          <div>
+            <button
+              onClick={playPreview}
+              className="rounded-md bg-green-600 px-4 py-2 font-semibold text-white"
+            >
+              Play
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -74,10 +76,16 @@ const ActualComponent = () => {
     );
 
   return (
-    <div className="min-h-screen bg-black p-8">
+    <div className="min-h-screen bg-black p-4">
       <h1 className="text-2xl font-semibold text-white">
         Today&apos;s recommendations
       </h1>
+
+      <p className="pt-2 font-light text-white/90">
+        Clicking on the play button will play a preview (Not all songs have
+        previews available). Clicking on the album cover will open the song in
+        spotify
+      </p>
 
       <div className="grid gap-4 pt-8">
         {data?.payload.map((track) => {

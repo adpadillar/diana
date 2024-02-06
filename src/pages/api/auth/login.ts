@@ -21,7 +21,8 @@ const handler = (req: Request) => {
     "streaming \
                  user-read-email \
                  user-read-private \
-                 user-top-read";
+                 user-top-read \
+                 user-library-read";
 
   const url = new URL(req.url);
   const source = url.searchParams.get("source");
