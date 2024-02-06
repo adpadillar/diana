@@ -1,4 +1,5 @@
 import { type AccessToken, SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import {
   useEffect,
@@ -7,6 +8,7 @@ import {
   type ReactNode,
   useContext,
 } from "react";
+import { db } from "~/utils/firebase/firebase";
 
 const SdkContext = createContext<ReturnType<typeof useSdkInternal>>({
   loggedIn: false,
@@ -64,6 +66,16 @@ const useSdkInternal = ():
       "f8968eaa5300419f82038abec5209fc3",
       jsonToken as AccessToken,
     );
+
+    // Create the user object in firebase (if it does not exist)
+    newSdk.currentUser
+      .profile()
+      .then(async (user) => {
+        const userDocRef = doc(db, "users", user.id);
+        // TODO: Maybe filter this at some point
+        await setDoc(userDocRef, user);
+      })
+      .catch((err) => console.warn(err));
 
     // clean up the url after we are done
     void router.push(
