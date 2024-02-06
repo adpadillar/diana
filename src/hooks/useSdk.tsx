@@ -1,4 +1,8 @@
-import { type AccessToken, SpotifyApi } from "@spotify/web-api-ts-sdk";
+import {
+  type AccessToken,
+  SpotifyApi,
+  type UserProfile,
+} from "@spotify/web-api-ts-sdk";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import {
@@ -14,6 +18,7 @@ const SdkContext = createContext<ReturnType<typeof useSdkInternal>>({
   loggedIn: false,
   sdk: null,
   loading: true,
+  user: null,
 });
 
 export const SdkContextProvider = (props: { children: ReactNode }) => {
@@ -33,17 +38,20 @@ export const useSdk = () => {
 const useSdkInternal = ():
   | {
       loggedIn: true;
+      user: UserProfile;
       sdk: SpotifyApi;
       loading: boolean;
     }
   | {
       loggedIn: false;
+      user: null;
       sdk: null;
       loading: boolean;
     } => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sdk, setSdk] = useState<SpotifyApi | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -56,6 +64,7 @@ const useSdkInternal = ():
       setLoggedIn(false);
       setSdk(null);
       setLoading(false);
+      setUser(null);
       return;
     }
 
@@ -71,6 +80,7 @@ const useSdkInternal = ():
     newSdk.currentUser
       .profile()
       .then(async (user) => {
+        setUser(user);
         const userDocRef = doc(db, "users", user.id);
         // TODO: Maybe filter this at some point
         await setDoc(userDocRef, user);
@@ -94,5 +104,6 @@ const useSdkInternal = ():
     loggedIn,
     sdk,
     loading,
+    user,
   };
 };

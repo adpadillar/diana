@@ -20,7 +20,8 @@ const handler = (req: Request) => {
   const scope =
     "streaming \
                  user-read-email \
-                 user-read-private";
+                 user-read-private \
+                 user-top-read";
 
   const url = new URL(req.url);
   const source = url.searchParams.get("source");
