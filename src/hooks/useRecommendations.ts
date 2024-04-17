@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "~/utils/firebase/firebase";
 import {
   type SpotifyApi,
@@ -113,15 +113,15 @@ export const getTodaysRecommendation = async (
   sdk: SpotifyApi,
 ) => {
   const docRef = doc(db, "users", user.id, "recommendations", getDateId());
-  // const docRes = await getDoc(docRef);
+  const docRes = await getDoc(docRef);
 
   // Create the recommendation!
   const newRecommendation = await createTodaysRecommendation(sdk);
 
-  // Temporarely always generate a new recommendation
-  //if (docRes.exists()) {
-  //  return { ...docRes.data(), id: docRes.id } as Recommendation;
-  //}
+  // Temporarely always generate a new recommendation while in dev
+  if (window.location.hostname !== "localhost" && docRes.exists()) {
+    return { ...docRes.data(), id: docRes.id } as Recommendation;
+  }
 
   // store new recommendation in db;
   await setDoc(docRef, newRecommendation);

@@ -1,4 +1,4 @@
-import { Track } from "@spotify/web-api-ts-sdk";
+import { type Track } from "@spotify/web-api-ts-sdk";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
@@ -6,7 +6,13 @@ import { Redirect } from "~/components/Redirect";
 import { getTodaysRecommendation } from "~/hooks/useRecommendations";
 import { useSdk } from "~/hooks/useSdk";
 
-const Track = ({ track, audio }: { track: Track; audio: HTMLAudioElement }) => {
+const TrackPage = ({
+  track,
+  audio,
+}: {
+  track: Track;
+  audio: HTMLAudioElement;
+}) => {
   const playPreview = async () => {
     if (!track.preview_url) return;
 
@@ -89,7 +95,7 @@ const ActualComponent = () => {
 
       <div className="grid gap-4 pt-8">
         {data?.payload.map((track) => {
-          return <Track key={track.id} track={track} audio={audio} />;
+          return <TrackPage key={track.id} track={track} audio={audio} />;
         })}
       </div>
     </div>
